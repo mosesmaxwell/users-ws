@@ -1,9 +1,14 @@
 package com.joszefa.users.ws.model.response;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 @JacksonXmlRootElement(localName = "user")
-public class UserRest {
+@Document(collection = "users")
+public class Users {
+    @Id
+    private String id;
     private String firstName;
     private String lastName;
     private String email;
@@ -11,6 +16,10 @@ public class UserRest {
     private String userId;
     private String username;
     private String password;
+
+    public String getId() {
+        return id;
+    }
 
     public String getFirstName() {
         return firstName;

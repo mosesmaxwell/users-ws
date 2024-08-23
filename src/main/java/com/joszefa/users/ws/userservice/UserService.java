@@ -2,18 +2,18 @@ package com.joszefa.users.ws.userservice;
 
 import com.joszefa.users.ws.model.request.UpdateUserDetails;
 import com.joszefa.users.ws.model.request.UserDetails;
-import com.joszefa.users.ws.model.response.UserRest;
+import com.joszefa.users.ws.model.response.Users;
 
-import java.util.Map;
+import java.util.List;
 
 public interface UserService {
-    Map<String, UserRest> getUsers(int page, int count, String sort);
+    List<Users> getUsers(int page, int count, String sort);
 
-    UserRest getUser(String userId);
+    Users getUser(String userId);
 
-    UserRest createUser(UserDetails userDetails);
+    Users createUser(UserDetails userDetails);
 
-    UserRest updateUser(String userId, UpdateUserDetails userDetails);
+    Users updateUser(String userId, UpdateUserDetails userDetails);
 
     void deleteUser(String userId);
 }

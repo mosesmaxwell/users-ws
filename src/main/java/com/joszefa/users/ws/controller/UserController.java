@@ -2,7 +2,7 @@ package com.joszefa.users.ws.controller;
 
 import com.joszefa.users.ws.model.request.UpdateUserDetails;
 import com.joszefa.users.ws.model.request.UserDetails;
-import com.joszefa.users.ws.model.response.UserRest;
+import com.joszefa.users.ws.model.response.Users;
 import com.joszefa.users.ws.userservice.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
+import java.util.List;
 
 @RestController
 @RequestMapping("users")
@@ -25,7 +25,7 @@ public class UserController {
                                    @RequestParam(value = "count", defaultValue = "10") int count,
                                    @RequestParam(value = "sort", defaultValue = "desc", required = false) String sort
     ) {
-        Map<String, UserRest> users = userService.getUsers(page, count, sort);
+        List<Users> users = userService.getUsers(page, count, sort);
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
@@ -33,8 +33,8 @@ public class UserController {
             MediaType.APPLICATION_JSON_VALUE,
             MediaType.APPLICATION_XML_VALUE
     })
-    public ResponseEntity<UserRest> getUser(@PathVariable String userId) {
-        UserRest user = userService.getUser(userId);
+    public ResponseEntity<Users> getUser(@PathVariable String userId) {
+        Users user = userService.getUser(userId);
         if (user == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
@@ -49,14 +49,14 @@ public class UserController {
             MediaType.APPLICATION_JSON_VALUE,
             MediaType.APPLICATION_XML_VALUE
     })
-    public ResponseEntity<UserRest> createUser(@Valid @RequestBody UserDetails userDetails) {
-        UserRest user = userService.createUser(userDetails);
+    public ResponseEntity<Users> createUser(@Valid @RequestBody UserDetails userDetails) {
+        Users user = userService.createUser(userDetails);
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 
     @PutMapping(path = "/{userId}")
-    public ResponseEntity<UserRest> updateUser(@PathVariable String userId, @Valid @RequestBody UpdateUserDetails userDetails) {
-        UserRest user = userService.updateUser(userId, userDetails);
+    public ResponseEntity<Users> updateUser(@PathVariable String userId, @Valid @RequestBody UpdateUserDetails userDetails) {
+        Users user = userService.updateUser(userId, userDetails);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 

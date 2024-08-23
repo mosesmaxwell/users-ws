@@ -2,43 +2,45 @@ package com.joszefa.users.ws.userservice.impl;
 
 import com.joszefa.users.ws.model.request.UpdateUserDetails;
 import com.joszefa.users.ws.model.request.UserDetails;
-import com.joszefa.users.ws.model.response.UserRest;
+import com.joszefa.users.ws.model.response.Users;
+import com.joszefa.users.ws.repository.UsersRepo;
 import com.joszefa.users.ws.shared.Utils;
 import com.joszefa.users.ws.userservice.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
 
-    Map<String, UserRest> users;
     Utils utils;
+    UsersRepo usersRepo;
 
     public UserServiceImpl() {
     }
 
     @Autowired
-    public UserServiceImpl(Utils utils) {
+    public UserServiceImpl(Utils utils, UsersRepo usersRepo) {
         this.utils = utils;
+        this.usersRepo = usersRepo;
     }
 
     @Override
-    public Map<String, UserRest> getUsers(int page, int size, String sort) {
+    public List<Users> getUsers(int page, int size, String sort) {
+        List<Users> users = usersRepo.findAll();
         return users;
     }
 
     @Override
-    public UserRest getUser(String userId) {
-        return users.get(userId);
+    public Users getUser(String userId) {
+        return usersRepo.findByUserId(userId);
     }
 
     @Override
-    public UserRest createUser(UserDetails userDetails) {
+    public Users createUser(UserDetails userDetails) {
 
-        UserRest returnValue = new UserRest();
+        Users returnValue = new Users();
         returnValue.setFirstName(userDetails.getFirstName());
         returnValue.setLastName(userDetails.getLastName());
         returnValue.setEmail(userDetails.getEmail());
@@ -48,23 +50,22 @@ public class UserServiceImpl implements UserService {
         String userId = utils.generateUserId();
         returnValue.setUserId(userId);
 
-        if (users == null) users = new HashMap<>();
-        users.put(userId, returnValue);
-
+        usersRepo.save(returnValue);
         return returnValue;
     }
 
     @Override
-    public UserRest updateUser(String userId, UpdateUserDetails userDetails) {
-        UserRest returnValue = users.get(userId);
-        returnValue.setFirstName(userDetails.getFirstName());
-        returnValue.setLastName(userDetails.getLastName());
-        users.put(userId, returnValue);
-        return returnValue;
+    public Users updateUser(String userId, UpdateUserDetails userDetails) {
+        Users existingUser = usersRepo.findByUserId(userId);
+        System.out.println("User ID == " +existingUser.getUserId());
+        existingUser.setFirstName(userDetails.getFirstName());
+        existingUser.setLastName(userDetails.getLastName());
+        usersRepo.save(existingUser);
+        return existingUser;
     }
 
     @Override
     public void deleteUser(String userId) {
-        users.remove(userId);
+        usersRepo.deleteByUserId(userId);
     }
 }

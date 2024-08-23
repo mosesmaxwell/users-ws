@@ -1,8 +1,6 @@
 package com.joszefa.users.ws.model.request;
 
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 
 public class UpdateUserDetails {
     @NotBlank(message = "Firstname cannot be null")
